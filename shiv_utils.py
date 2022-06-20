@@ -77,7 +77,7 @@ def sha256sum(src_fpath, save_to=None):
 
 
 def build(pkg_dpath, reqs_rel_fpath, app_dname, entry_point, pybin='python3',
-        pyz_fpath=None, preamble_fpath=None):
+        pyz_fpath=None, preamble_fpath=None, force_deps=False):
     app_dpath = pkg_dpath / app_dname
     dist_dpath = pkg_dpath / '_shiv_dist'
     dist_app_dpath = dist_dpath / app_dname
@@ -85,7 +85,7 @@ def build(pkg_dpath, reqs_rel_fpath, app_dname, entry_point, pybin='python3',
     pyz_fpath = pyz_fpath or pkg_dpath.joinpath(f'{app_dname}.pyz')
     reqs_hash_fpath = dist_dpath / '_shiv_reqs_hash.txt'
 
-    install_deps = fpath_read(reqs_hash_fpath) != sha256sum(reqs_fpath)
+    install_deps = force_deps or fpath_read(reqs_hash_fpath) != sha256sum(reqs_fpath)
 
     if install_deps:
         # cleanup all present dependency files to avoid accidental junk in the build
